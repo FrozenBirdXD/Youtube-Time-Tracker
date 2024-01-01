@@ -1,0 +1,45 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube Time Tracker",
+    "version": "1.0",
+    "description": "Track the time you spend on YouTube",
+    "icons": {
+        "128": "icons/icon.png"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "storage"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_popup": "pages/popup.html",
+        "default_title": "YouTube Time Tracker"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "/.png"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
