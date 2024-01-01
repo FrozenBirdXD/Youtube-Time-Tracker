@@ -4,7 +4,7 @@
     "version": "1.0",
     "description": "Track the time you spend on YouTube",
     "icons": {
-        "128": "icons/icon.png"
+        "128": "assets/icons/icon.png"
     },
     "permissions": [
         "tabs",
@@ -16,19 +16,9 @@
         "https://*/*"
     ],
     "action": {
-        "default_popup": "pages/popup.html",
+        "default_popup": "pages/html/popup.html",
         "default_title": "YouTube Time Tracker"
     },
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "/.png"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
-        }
-    ],
     "background": {
         "service_worker": "background.js"
     }

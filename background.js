@@ -19,7 +19,7 @@ function checkCurrentTab() {
                     isTracking = true;
                 }
 
-            } else if (url && typeof url === 'string') { // The current tab is not on YouTube
+            } else if (url && typeof url === 'string') { // the current tab is not on YouTube
                 // stop tracking if currently tracking
                 if (isTracking) {
                     const endTime = new Date().getTime();
