@@ -10,38 +10,54 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // add clear timer button to page
-const button = document.createElement('button');
-button.innerText = 'Clear Timer';
-button.addEventListener('click', () => {
+const clearTimerButton = document.getElementById('clearTimer');
+clearTimerButton.addEventListener('click', () => {
     alert('Timer is now cleared');
     chrome.storage.sync.set({ totalTime: 0 })
 });
-document.body.appendChild(button)
 
 // event handler for settings button
 const settingsButton = document.getElementsByClassName('settings')[0];
 
 settingsButton.addEventListener('click', () => {
-    // Fetch the content of the external settings HTML file
+    // fetch content of the external settings HTML file
     fetch('/pages/html/settings.html')
         .then(response => response.text())
         .then(html => {
-            // Create a new div element to hold the content of the settings page
+            // create new div element to hold content of the settings page
             const settingsPage = document.createElement('div');
             settingsPage.innerHTML = html;
 
-            // Replace the current content of the popup with the settings page
+            // append settings page content to the document body
             document.body.innerHTML = '';
             document.body.appendChild(settingsPage);
 
-            const backButton = document.createElement('button');
-            backButton.textContent = 'Back';
+            // load the associated JS file
+            const scriptElement = document.createElement('script');
+            scriptElement.src = '/pages/javascript/settings.js';
+
+            //---------------------------------------------------------------
+            // js code for settings page
+            //---------------------------------------------------------------
+            // event handler for back button
+            const backButton = document.getElementsByClassName('back')[0];
             backButton.addEventListener('click', () => {
-                // Reload the popup with the original content
                 location.reload();
             });
 
-            document.body.appendChild(backButton);
+            // event handler for save settings button
+            const saveSettingsButton = document.getElementById('saveSettings');
+            saveSettingsButton.addEventListener('click', function () {
+                const dailyLimitInput = document.getElementById('dailyLimit');
+                const dailyLimit = dailyLimitInput.value;
+
+                // TODO: save settings logic 
+
+                alert(`Settings saved! Daily limit set to ${dailyLimit} minutes.`);
+            });
+            //---------------------------------------------------------------
+
+            document.body.appendChild(scriptElement);
         })
         .catch(error => console.error('Error loading settings HTML:', error));
 });
