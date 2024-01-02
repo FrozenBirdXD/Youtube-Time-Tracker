@@ -25,4 +25,5 @@ git clone https://github.com/FrozenBirdXD/Youtube-Time-Tracker.git
 6. Open YouTube in a tab to start tracking time. The extension will automatically track time spent on YouTube. To view the time, click on the extension icon in your toolbar
 
 ### Attribution
-Settings icon by <a href="https://www.figma.com/community/file/1166831539721848736?ref=svgrepo.com" target="_blank">Solar Icons</a> in CC Attribution License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a>
+- Settings icon by <a href="https://www.figma.com/community/file/1166831539721848736?ref=svgrepo.com" target="_blank">Solar Icons</a> in CC Attribution License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a>
+- Back icon by <a href="https://github.com/Richard9394/MingCute?ref=svgrepo.com" target="_blank">Richard9394</a> in Apache License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a>
