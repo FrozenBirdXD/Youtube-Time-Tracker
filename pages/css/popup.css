@@ -1,8 +1,9 @@
 body {
     width: 300px;
+    background-color: rgba(95, 158, 160, 0.3);
 }
 
-header .title {
+#title {
     text-align: left;
     font-size: 17px;
     flex-grow: 1;
@@ -22,15 +23,25 @@ header {
     background-position: 16px center;
 }
 
-header button.settings {
+#settings {
     align-self: center;
+    padding: 9px 15px;
     width: 30px;
     height: 30px;
     background-color: #fff;
     box-shadow: none;
-    cursor: pointer;
     background-image: url(/assets/icons/settings-icon.svg);
     background-size: 100%;
+    transition: 0.15s all;
+    transition: transform 0.4s ease-in-out;
+}
+
+#settings:active {
+    transform: scale(0.90);
+}
+
+#settings:hover {
+    transform: rotate(90deg);
 }
 
 button {
@@ -52,4 +63,8 @@ button:active {
     /* Scaling button to 0.98 to its original size */
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     /* Lowering the shadow */
+}
+
+button:hover {
+    background-color: cadetblue;
 }
