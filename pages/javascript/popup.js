@@ -17,7 +17,7 @@ clearTimerButton.addEventListener('click', () => {
 });
 
 // event handler for settings button
-const settingsButton = document.getElementsByClassName('settings')[0];
+const settingsButton = document.getElementById('settings');
 
 settingsButton.addEventListener('click', () => {
     // fetch content of the external settings HTML file
@@ -40,7 +40,7 @@ settingsButton.addEventListener('click', () => {
             // js code for settings page
             //---------------------------------------------------------------
             // event handler for back button
-            const backButton = document.getElementsByClassName('back')[0];
+            const backButton = document.getElementById('back');
             backButton.addEventListener('click', () => {
                 location.reload();
             });
