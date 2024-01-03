@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
+const STORAGE_KEY_START_TIME = "startTime";
+const STORAGE_KEY_TOTAL_TIME = "totalTime";
+
+document.addEventListener('DOMContentLoaded', loadSavedTime());
+
+function loadSavedTime() {
     chrome.storage.sync.get(['totalTime'], function (result) {
         if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError);
@@ -7,13 +12,20 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('timeSpent').innerText = `Total time spent on YouTube: ${formatTime(totalTime)}`;
         }
     });
+}
+
+chrome.action.onClicked.addListener(() => {
+    loadSavedTime();
 });
 
 // add clear timer button to page
 const clearTimerButton = document.getElementById('clearTimer');
 clearTimerButton.addEventListener('click', () => {
     alert('Timer is now cleared');
-    chrome.storage.sync.set({ totalTime: 0 })
+    chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: 0 })
+    chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
+
+    loadSavedTime();
 });
 
 // event handler for settings button
@@ -63,15 +75,14 @@ settingsButton.addEventListener('click', () => {
 });
 
 
-function formatTime(milliseconds) {
-    if (milliseconds == 0) {
+function formatTime(seconds) {
+    if (seconds == 0) {
         return "00:00:00";
     }
-    if (milliseconds < 0) {
+    if (seconds < 0) {
+        console.log(seconds);
         return "Invalid time";
     }
-
-    let seconds = Math.floor(milliseconds / 1000);
 
     const hours = Math.floor(seconds / 3600);
     seconds %= 3600;
