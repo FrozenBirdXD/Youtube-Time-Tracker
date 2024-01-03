@@ -9,6 +9,7 @@ function loadSavedTime() {
             console.error(chrome.runtime.lastError);
         } else {
             let totalTime = result.totalTime || 0;
+            // console.log("totalTime:" + totalTime);
             document.getElementById('timeSpent').innerText = `Total time spent on YouTube: ${formatTime(totalTime)}`;
         }
     });
@@ -75,12 +76,12 @@ settingsButton.addEventListener('click', () => {
 });
 
 
-function formatTime(seconds) {
-    if (seconds == 0) {
+function formatTime(milliseconds) {
+    if (milliseconds === 0) {
         return "00:00:00";
     }
-    if (seconds < 0) {
-        console.log(seconds);
+    if (milliseconds < 0) {
+        console.log(milliseconds);
         return "Invalid time";
     }
 
@@ -90,7 +91,7 @@ function formatTime(seconds) {
     seconds %= 60;
 
     // format time HH:MM:SS
-    const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+    const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(Math.floor(seconds))}`;
     return formattedTime;
 }
 
