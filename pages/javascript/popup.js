@@ -76,12 +76,12 @@ settingsButton.addEventListener('click', () => {
 });
 
 
-function formatTime(milliseconds) {
-    if (milliseconds === 0) {
+function formatTime(seconds) {
+    if (seconds === 0) {
         return "00:00:00";
     }
-    if (milliseconds < 0) {
-        console.log(milliseconds);
+    if (seconds < 0) {
+        console.log(seconds);
         return "Invalid time";
     }
 
