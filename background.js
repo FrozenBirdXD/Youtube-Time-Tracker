@@ -10,59 +10,48 @@ function checkCurrentTab() {
             console.log("URL: ", url);
 
             const youtubeRegex = /^https:\/\/www\.youtube\.com/;
-            // if (url) {
-            //     console.log('url true');
-            // }
-            // if (typeof url == 'string') {
-            //     console.log('string true');
-            // }
-            // if (youtubeRegex.test(url)) {
-            //     console.log('regex true');
-            // }
 
             if (url && typeof url === 'string' && youtubeRegex.test(url)) { // if current tab is on YouTube
-                // start tracking if not already tracking
                 if (!isTracking) {
-                    chrome.storage.sync.get([STORAGE_KEY_START_TIME]).then((result) => {
-                        const savedStartTime = result[STORAGE_KEY_START_TIME];
-                        // console.log('??');
-                        // console.log('savedStartTime: ' + savedStartTime);
-
-                        const startTime = new Date().getTime() / 1000;
-
-                        if (savedStartTime == null || savedStartTime == 0) {
-                            chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: startTime });
-                        }
-                        isTracking = true;
-                    });
+                    startTracking();
                 }
-
             } else if (url && typeof url === 'string') { // the current tab is not on YouTube
-                // stop tracking if currently tracking
                 if (isTracking) {
-                    const endTime = new Date().getTime() / 1000;
-
-                    chrome.storage.sync.get([STORAGE_KEY_START_TIME, STORAGE_KEY_TOTAL_TIME], function (result) {
-                        const startTime = result[STORAGE_KEY_START_TIME];
-                        // console.log('savedStartTime: ' + startTime);
-                        const duration = endTime - startTime;
-
-                        const savedTotalTime = result[STORAGE_KEY_TOTAL_TIME] || 0;
-                        // console.log('savedTotalTime: ' + savedTotalTime);
-                        // console.log('duration: ' + duration);
-                        chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: savedTotalTime + duration });
-                        chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
-                    });
-
-                    isTracking = false;
-                } else {
-                    // chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
-
+                    stopTracking();
                 }
             }
         }
     });
 };
+
+function startTracking() {
+    // start tracking if not already tracking
+    chrome.storage.sync.get([STORAGE_KEY_START_TIME]).then((result) => {
+        const savedStartTime = result[STORAGE_KEY_START_TIME];
+        const startTime = new Date().getTime() / 1000;
+
+        if (savedStartTime == null || savedStartTime == 0) {
+            chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: startTime });
+        }
+    });
+
+    isTracking = true;
+}
+
+function stopTracking() {
+    const endTime = new Date().getTime() / 1000;
+
+    chrome.storage.sync.get([STORAGE_KEY_START_TIME, STORAGE_KEY_TOTAL_TIME], function (result) {
+        const startTime = result[STORAGE_KEY_START_TIME];
+        const duration = endTime - startTime;
+        const savedTotalTime = result[STORAGE_KEY_TOTAL_TIME] || 0;
+
+        chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: savedTotalTime + duration });
+        chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
+    });
+
+    isTracking = false;
+}
 
 const ALARM_NAME = '15sec';
 
@@ -79,7 +68,7 @@ async function createAlarm() {
 }
 
 // check every 15 seconds
-chrome.alarms.onAlarm.addListener(function (activeInfo) {
+chrome.alarms.onAlarm.addListener(() => {
     console.log('alarm');
     checkCurrentTab();
 });
@@ -94,6 +83,17 @@ chrome.tabs.onActivated.addListener(() => {
     console.log('activated');
     checkCurrentTab();
 });
+
+chrome.windows.onFocusChanged.addListener((window) => {
+    if (window == chrome.windows.WINDOW_ID_NONE) {
+        console.log('window lost');
+        // wtf
+        // stopTracking();
+    } else {
+        // checkCurrentTab();
+    }
+});
+
 
 // initial check when the extension is loaded
 checkCurrentTab();
