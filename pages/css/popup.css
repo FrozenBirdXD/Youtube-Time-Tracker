@@ -1,6 +1,7 @@
 body {
     width: 300px;
     background-color: rgba(95, 158, 160, 0.3);
+    font-family: 'Arial', sans-serif;
 }
 
 #title {
@@ -44,6 +45,37 @@ header {
     transform: rotate(90deg);
 }
 
+section {
+    margin-top: 20px;
+}
+
+h2 {
+    color: #4285f4;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+#progressBarContainer {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 20px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0;
+    background-color: #4caf50;
+    border-radius: 5px;
+}
+
 button {
     text-decoration: none;
     border: none;
@@ -60,9 +92,7 @@ button {
 
 button:active {
     transform: scale(0.98);
-    /* Scaling button to 0.98 to its original size */
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    /* Lowering the shadow */
 }
 
 button:hover {
