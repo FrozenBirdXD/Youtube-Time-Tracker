@@ -1,5 +1,6 @@
 const STORAGE_KEY_START_TIME = "startTime";
 const STORAGE_KEY_TOTAL_TIME = "totalTime";
+const STORAGE_KEY_TODAY_TIME = "todayTime";
 let isTracking = false; // track whether YouTube is currently being tracked
 let isBrowserWindowFocused = true;
 
@@ -45,7 +46,7 @@ async function startTracking() {
 async function stopTracking() {
     const endTime = Math.floor(new Date().getTime() / 1000);
     const result = await new Promise((resolve) => {
-        chrome.storage.sync.get([STORAGE_KEY_START_TIME, STORAGE_KEY_TOTAL_TIME], resolve);
+        chrome.storage.sync.get([STORAGE_KEY_START_TIME, STORAGE_KEY_TOTAL_TIME, STORAGE_KEY_TODAY_TIME], resolve);
     });
     const startTime = result[STORAGE_KEY_START_TIME];
 
@@ -55,9 +56,14 @@ async function stopTracking() {
 
     const duration = endTime - startTime;
     const savedTotalTime = result[STORAGE_KEY_TOTAL_TIME] || 0;
+    const savedTodayTime = result[STORAGE_KEY_TODAY_TIME] || 0;
 
     await new Promise((resolve) => {
         chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: savedTotalTime + duration }, resolve);
+    });
+
+    await new Promise((resolve) => {
+        chrome.storage.sync.set({ [STORAGE_KEY_TODAY_TIME]: savedTodayTime + duration }, resolve);
     });
 
     await new Promise((resolve) => {
@@ -68,6 +74,7 @@ async function stopTracking() {
 }
 
 const ALARM_NAME = '15sec';
+const ALARM_NAME_DAY = '1day';
 
 // check if alarm exists to avoid resetting the timer.
 // the alarm might be removed when the browser session restarts.
@@ -78,15 +85,26 @@ async function createAlarm() {
         chrome.alarms.create(ALARM_NAME, {
             periodInMinutes: 0.25
         });
-        console.log('check tab from alarm creation');
-        checkCurrentTab();
     }
+    const alarmDay = await chrome.alarms.get(ALARM_NAME_DAY);
+    if (typeof alarmDay === 'undefined') {
+        console.log('created alarm day');
+        chrome.alarms.create(ALARM_NAME_DAY, {
+            periodInMinutes: 1440
+        });
+    }
+    checkCurrentTab();
 }
 
-// check every 15 seconds
-chrome.alarms.onAlarm.addListener(async () => {
-    console.log('alarm');
-    await checkCurrentTab();
+chrome.alarms.onAlarm.addListener(async function (alarm) {
+    if (alarm.name === ALARM_NAME) {
+        await checkCurrentTab();
+    }
+    if (alarm.name === ALARM_NAME_DAY) {
+        chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: 0 })
+        chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
+        await checkCurrentTab();
+    }
 });
 
 chrome.tabs.onUpdated.addListener(async () => {
