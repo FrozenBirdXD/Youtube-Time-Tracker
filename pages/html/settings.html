@@ -15,8 +15,15 @@
     </header>
 
     <div id="settings-content">
-        <label for="dailyLimit">Set Daily Time Limit (minutes):</label>
-        <input type="number" id="dailyLimit" placeholder="Enter daily limit">
+        <label for="dailyLimit">Set Daily Time Limit:</label>
+        <form>
+            <div class="limitIn">
+                <input type="number" id="hourInput" name="hourInput" min="0" max="23" placeholder="HH" required>
+            </div>
+            <div class="limitIn">
+                <input type="number" id="minuteInput" name="minuteInput" min="0" max="59" placeholder="MM" required>
+            </div>
+        </form>
 
         <button id="saveSettings">Save Settings</button>
     </div>
