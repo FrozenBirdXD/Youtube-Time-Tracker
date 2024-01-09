@@ -1,16 +1,18 @@
 const STORAGE_KEY_START_TIME = "startTime";
 const STORAGE_KEY_TOTAL_TIME = "totalTime";
+const STORAGE_KEY_TODAY_TIME = "todayTime";
 
 document.addEventListener('DOMContentLoaded', loadSavedTime());
 
 function loadSavedTime() {
-    chrome.storage.sync.get(['totalTime'], function (result) {
+    chrome.storage.sync.get([STORAGE_KEY_TOTAL_TIME, STORAGE_KEY_TODAY_TIME], function (result) {
         if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError);
         } else {
             let totalTime = result.totalTime || 0;
-            // console.log("totalTime:" + totalTime);
+            let timeToday = result.todayTime || 0;
             document.getElementById('timeSpent').innerText = `Total time spent on YouTube: ${formatTime(totalTime)}`;
+            document.getElementById('timeToday').innerText = `Time watched today: ${formatTime(timeToday)}`;
         }
     });
 }
@@ -24,6 +26,7 @@ const clearTimerButton = document.getElementById('clearTimer');
 clearTimerButton.addEventListener('click', () => {
     alert('Timer is now cleared');
     chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: 0 })
+    chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
     chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
 
     loadSavedTime();
