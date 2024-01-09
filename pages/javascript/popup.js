@@ -16,8 +16,18 @@ function loadSavedTime() {
             document.getElementById('timeSpent').innerText = `Total time spent on YouTube: ${formatTime(totalTime)}`;
             document.getElementById('timeToday').innerText = `Time watched today: ${formatTime(timeToday)}`;
             document.getElementById('timeLeft').innerText = `Time left today: ${formatTime(dailyTimeLimit - timeToday)}`;
+            fillProgressBar(timeToday / dailyTimeLimit * 100);
         }
     });
+}
+
+function fillProgressBar(percentage) {
+    // Ensure the percentage is within the valid range (0 to 100)
+    percentage = Math.min(100, Math.max(0, percentage));
+
+    // Calculate the width based on the percentage
+    var progressBar = document.getElementById("progressBar");
+    progressBar.style.width = percentage + "%";
 }
 
 chrome.action.onClicked.addListener(() => {
