@@ -101,8 +101,11 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
         await checkCurrentTab();
     }
     if (alarm.name === ALARM_NAME_DAY) {
-        chrome.storage.sync.set({ [STORAGE_KEY_TOTAL_TIME]: 0 })
+        chrome.storage.sync.set({ [STORAGE_KEY_TODAY_TIME]: 0 })
         chrome.storage.sync.set({ [STORAGE_KEY_START_TIME]: 0 });
+
+        var progressBar = document.getElementById("progressBar");
+        progressBar.style.width = 0 + "%";
         await checkCurrentTab();
     }
 });
